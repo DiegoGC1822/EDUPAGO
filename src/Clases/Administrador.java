@@ -640,50 +640,90 @@ public class Administrador extends Usuario{
         System.out.println("---------------------------------------------------------------");
         System.out.printf("| %-10s | %-10s | %-15s | %-15s |\n", "ID", "Fecha", "Tipo", "Estado");
         System.out.println("---------------------------------------------------------------");
-        for (Reclamo reclamo : DB.getReclamos()) {
-            System.out.printf("| %-10s | %-10s | %-15s | %-15s |\n",
+        for (Trabajador trabajador: DB.getTrabajadores()) {
+            for(Reclamo reclamo : trabajador.getReclamos()){
+                System.out.printf("| %-10s | %-10s | %-15s | %-15s |\n",
                 reclamo.getId(),
                 reclamo.getFecha(),
                 reclamo.getTipo()[reclamo.getId_tipo() - 1],
                 reclamo.getEstado()[reclamo.getId_estado() - 1]);
-            System.out.println("---------------------------------------------------------------");
+                System.out.println("---------------------------------------------------------------"); 
+            }
         }
         int op = 0;
-        while(op < 1 || op> 2){
+        while(op < 1 || op > 3){
             System.out.println("-------------------------------");
             System.out.println("1. Ver detalle de un reclamo");
-            System.out.println("3. Actualizar estado");
-            System.out.println("2. Regresar al menu principal");
+            System.out.println("2. Actualizar estado");
+            System.out.println("3. Regresar al menu principal");
             System.out.println("-------------------------------");
             op = scanner.nextInt();
             scanner.nextLine();
             System.out.println("-------------------------------");
+            int id;
+            boolean noEncontrado;
             switch(op){
                 case 1:
                     System.out.println("Digite el id del reclamo:");
-                    int id = scanner.nextInt();
+                    id = scanner.nextInt();
                     scanner.nextLine();
-                    boolean noEncontrado = true;
-                    for(Reclamo reclamo : DB.getReclamos()){
-                        if(reclamo.getId() == id){
-                            noEncontrado = true;
-                            System.out.println("=====================");
-                            System.out.println("Detalle del reclamo");
-                            System.out.println("=====================");
-                            System.out.println(reclamo.getDetalle());
-                            System.out.println("---------------------------------");
-                            System.out.println("Regresar? (Y)");
-                            String volver = scanner.nextLine();
-                            gestionarReclamos();
+                    noEncontrado = true;
+                    for (Trabajador trabajador: DB.getTrabajadores()){
+                        for(Reclamo reclamo : trabajador.getReclamos()){
+                            if(reclamo.getId().equals(id)){
+                                noEncontrado = false;
+                                System.out.println("=====================");
+                                System.out.println("Detalle del reclamo");
+                                System.out.println("=====================");
+                                System.out.println(reclamo.getDetalle());
+                                System.out.println("---------------------------------");
+                                System.out.println("Regresar? (Y)");
+                                String volver = scanner.nextLine();
+                                gestionarReclamos();   
+                            }
                         }
                     }
                     if(noEncontrado){
                         System.out.println("No se ha encontrado un reclamo con ese ID");
+                        gestionarReclamos();
                     }
+                    break;
                 case 2:
-                    menuPrincipal();
+                    noEncontrado = true;
+                    System.out.println("------------");
+                    System.out.println("ID: ");
+                    id = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.println("------------");
+                    for (Trabajador trabajador: DB.getTrabajadores()){
+                        for(Reclamo reclamo : trabajador.getReclamos()){
+                            if(reclamo.getId().equals(id)){
+                                noEncontrado = false;
+                                System.out.println("===============");
+                                System.out.println("Actual estado");
+                                System.out.println("===============");
+                                System.out.println(reclamo.getEstado()[reclamo.getId_estado() - 1]);
+                                System.out.println("===============");
+                                System.out.println("Nuevo estado");
+                                System.out.println("===============");
+                                System.out.println("1. Resuelto");
+                                System.out.println("2. No procede");
+                                System.out.println("-------------------");
+                                int estado = scanner.nextInt();
+                                scanner.nextLine();
+                                reclamo.setId_estado(estado - 1);
+                            }
+                        }
+                    }
+                    if(noEncontrado){
+                        System.out.println("No se ha encontrado un reclamo con ese ID");
+                        gestionarReclamos();
+                    }
+                    break;
+                case 3:
+                    menuPrincipal();break;
                 default:
-                    System.out.println("Numero invalido");
+                    System.out.println("Numero invalido");break;
             }
         }
     }

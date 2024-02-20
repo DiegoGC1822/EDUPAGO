@@ -3,6 +3,7 @@ package Clases;
 import java.util.Scanner;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.security.SecureRandom;
 
 
 public class Empleado extends Usuario{
@@ -97,6 +98,19 @@ public class Empleado extends Usuario{
         String volver = scanner.nextLine();
     }
     
+    public static String generarID(int longitud) {
+        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder(longitud);
+
+        for (int i = 0; i < longitud; i++) {
+            int indice = random.nextInt(caracteres.length());
+            sb.append(caracteres.charAt(indice));
+        }
+
+        return sb.toString();
+    }
+    
     public void hacerReclamo(Trabajador trabajador){
         System.out.println("==================");
         System.out.println(" Tipo de reclamo ");
@@ -115,8 +129,7 @@ public class Empleado extends Usuario{
         String fechaFormateada = formato.format(fechaActual);
         Reclamo reclamo = new Reclamo(3,detalle,opcion,fechaFormateada);
         trabajador.getReclamos().add(reclamo);
-        DB.getReclamos().add(reclamo);
-        int id = trabajador.getReclamos().indexOf(reclamo);
+        String id = generarID(3);
         reclamo.setId(id);
         System.out.println("EL RECLAMO SE HA ENVIADO SATISFACTORIAMENTE");
         System.out.println("-------------------------------");
@@ -142,52 +155,60 @@ public class Empleado extends Usuario{
     
     public void verReclamos(Trabajador trabajador){
         System.out.println("Historial de reclamos para " + trabajador.getNombre() + " " + trabajador.getApellido() + ":");
-        System.out.println("---------------------------------------------------------------");
-        System.out.printf("| %-10s | %-10s | %-15s | %-15s |\n", "ID", "Fecha", "Tipo", "Estado");
-        System.out.println("---------------------------------------------------------------");
-        for (Reclamo reclamo : trabajador.getReclamos()) {
-            System.out.printf("| %-10s | %-10s | %-15s | %-15s |\n",
-                reclamo.getId(),
-                reclamo.getFecha(),
-                reclamo.getTipo()[reclamo.getId_tipo() - 1],
-                reclamo.getEstado()[reclamo.getId_estado() - 1]);
+        if(trabajador.getReclamos().isEmpty()){
+            System.out.println("No tiene reclamos registrados");
+            System.out.println("---------------------------------");
+            System.out.println("Volver al menu principal? (Y)");
+            String volver = scanner.nextLine();
+        }else{
             System.out.println("---------------------------------------------------------------");
-        }
-        int op = 0;
-        while(op < 1 || op> 2){
-            System.out.println("-------------------------------");
-            System.out.println("1. Ver detalle de un reclamo");
-            System.out.println("2. Regresar al menu principal");
-            System.out.println("-------------------------------");
-            op = scanner.nextInt();
-            scanner.nextLine();
-            System.out.println("-------------------------------");
-            switch(op){
-                case 1:
-                    System.out.println("Digite el id del reclamo:");
-                    int id = scanner.nextInt();
-                    scanner.nextLine();
-                    boolean noEncontrado = true;
-                    for(Reclamo reclamo : trabajador.getReclamos()){
-                        if(reclamo.getId() == id){
-                            noEncontrado = true;
-                            System.out.println("=====================");
-                            System.out.println("Detalle del reclamo");
-                            System.out.println("=====================");
-                            System.out.println(reclamo.getDetalle());
-                            System.out.println("---------------------------------");
-                            System.out.println("Regresar? (Y)");
-                            String volver = scanner.nextLine();
-                            verReclamos(trabajador);
+            System.out.printf("| %-10s | %-10s | %-15s | %-15s |\n", "ID", "Fecha", "Tipo", "Estado");
+            System.out.println("---------------------------------------------------------------");
+            for (Reclamo reclamo : trabajador.getReclamos()) {
+                System.out.printf("| %-10s | %-10s | %-15s | %-15s |\n",
+                    reclamo.getId(),
+                    reclamo.getFecha(),
+                    reclamo.getTipo()[reclamo.getId_tipo() - 1],
+                    reclamo.getEstado()[reclamo.getId_estado() - 1]);
+                System.out.println("---------------------------------------------------------------");
+            }
+            int op = 0;
+            while(op < 1 || op> 2){
+                System.out.println("-------------------------------");
+                System.out.println("1. Ver detalle de un reclamo");
+                System.out.println("2. Regresar al menu principal");
+                System.out.println("-------------------------------");
+                op = scanner.nextInt();
+                scanner.nextLine();
+                System.out.println("-------------------------------");
+                switch(op){
+                    case 1:
+                        System.out.println("Digite el id del reclamo:");
+                        int id = scanner.nextInt();
+                        scanner.nextLine();
+                        boolean noEncontrado = true;
+                        for(Reclamo reclamo : trabajador.getReclamos()){
+                            if(reclamo.getId().equals(id)){
+                                noEncontrado = true;
+                                System.out.println("=====================");
+                                System.out.println("Detalle del reclamo");
+                                System.out.println("=====================");
+                                System.out.println(reclamo.getDetalle());
+                                System.out.println("---------------------------------");
+                                System.out.println("Regresar? (Y)");
+                                String volver = scanner.nextLine();
+                                verReclamos(trabajador);
+                            }
                         }
-                    }
-                    if(noEncontrado){
-                        System.out.println("No se ha encontrado un reclamo con ese ID");
-                    }
-                case 2:
-                    menuPrincipal(trabajador);
-                default:
-                    System.out.println("Numero invalido");
+                        if(noEncontrado){
+                            System.out.println("No se ha encontrado un reclamo con ese ID");
+                        }
+                        break;
+                    case 2:
+                        menuPrincipal(trabajador);break;
+                    default:
+                        System.out.println("Numero invalido");break;
+                }
             }
         }
     }

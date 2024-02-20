@@ -7,7 +7,6 @@ import java.util.Scanner;
 public class DB {
     private static List<Trabajador> trabajadores = new ArrayList<>();
     private static List<Colegio> colegios = new ArrayList<>();
-    private static List<Reclamo> reclamos = new ArrayList<>();
     static Scanner scanner = new Scanner(System.in);
 
     public DB() {
@@ -30,6 +29,14 @@ public class DB {
         Pago pago2 = new Pago();
         pago2.setFecha("15-01-2024");
         trabajador2.createPago(pago2, trabajador2, colegios.get(1), 2);
+        
+        Reclamo reclamo1 = new Reclamo(3,"No me pagaron el mes pasado",1,"16-02-2024");
+        reclamo1.setId("1a1");
+        trabajador1.getReclamos().add(reclamo1);
+        
+        Reclamo reclamo2 = new Reclamo(3,"Trabajo 40 horas",2,"5-01-2024");
+        reclamo2.setId("3B1");
+        trabajador2.getReclamos().add(reclamo2);
 
         // Agregar los trabajadores a la lista de trabajadores
         trabajadores.add(trabajador1);
@@ -73,9 +80,5 @@ public class DB {
 
     public static List<Colegio> getColegios() {
         return colegios;
-    }
-
-    public static List<Reclamo> getReclamos() {
-        return reclamos;
     }
 }

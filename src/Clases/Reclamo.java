@@ -2,7 +2,7 @@ package Clases;
 
 
 public class Reclamo {
-    private int id;
+    private String id;
     private int id_estado;
     private static final String[] estado = {"Resuelto","No procede","No revisado"};
     private int id_tipo;
@@ -20,11 +20,11 @@ public class Reclamo {
         this.fecha = fecha;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
