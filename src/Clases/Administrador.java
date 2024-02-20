@@ -21,14 +21,15 @@ public class Administrador extends Usuario{
     
     public void menuPrincipal(){
         int opcion = 0;
-        while(opcion != 4){
+        while(opcion != 5){
             System.out.println("=====================");
             System.out.println("BIENVENIDO A EDUPAGO");
             System.out.println("=====================");
             System.out.println("1. Gestionar trabajadores y sus pagos");
             System.out.println("2. Gestionar reclamos");
-            System.out.println("3. Gestionar informes");
-            System.out.println("4. Salir");
+            System.out.println("3. Gestionar Colegios");
+            System.out.println("4. Gestionar Informes");
+            System.out.println("5. Salir");
             System.out.println("---------------------");
             opcion = scanner.nextInt();
             scanner.nextLine();
@@ -39,8 +40,10 @@ public class Administrador extends Usuario{
                 case 2:
                     gestionarReclamos();break;
                 case 3:
-                    gestionarInformes();break;
+                    gestionarColegios();break;
                 case 4:
+                    gestionarInformes();break;
+                case 5:
                     System.out.println("Nos vemos en otra ocasion");
                     DB.login();break;
                 default:
@@ -501,6 +504,9 @@ public class Administrador extends Usuario{
                }
            } 
         }
+        System.out.println("---------------------------------");
+        System.out.println("Volver a la gestion de trabajadores? (Y)");
+        String volver = scanner.nextLine();
     }
     
     public void eliminarPago(Trabajador trabajador){
@@ -527,7 +533,138 @@ public class Administrador extends Usuario{
             System.out.println("--------------------------------------------------");
         }
     }
+    
+    public void verColegios(){
+        System.out.println("--------------------------------------------------------------------------------------------------------");
+        System.out.printf("| %-20s | %-18s | %-15s | %-15s | %-20s |\n", "Nombre", "Localizacion", "Trabajadores","Vacantes","Tipo");
+        System.out.println("--------------------------------------------------------------------------------------------------------");
+        for(Colegio colegio : DB.getColegios()){
+            System.out.printf("| %-20s | %-18s | %-15d | %-15d | %-20s |\n",
+                colegio.getNombre(),
+                colegio.getLocalizacionNombre()[colegio.getId_localizacion() - 1],
+                colegio.getNumTrabajadores(),
+                colegio.getVacantes(),
+                colegio.getTipo()[colegio.getId_tipo() - 1]);
+            System.out.println("--------------------------------------------------------------------------------------------------------");
+        }
+    }
+    
+    public void agregarColegio(){
+        System.out.println("Nombre: ");
+        String nombre = scanner.nextLine();
+        int id_localizacion = 0;
+        while(id_localizacion < 1 || id_localizacion > 6){
+            System.out.println("==================");
+            System.out.println("   Localizacion: ");
+            System.out.println("==================");
+            System.out.println("1. Rural 1");
+            System.out.println("2. Rural 2");
+            System.out.println("3. Rural 3");
+            System.out.println("4. Frontera");
+            System.out.println("5. VRAEM");
+            System.out.println("6. Area metropolitana");
+            id_localizacion = scanner.nextInt();
+            scanner.nextLine();
+        }
+        System.out.println("==================");
+        System.out.println("     Vacantes: ");
+        System.out.println("==================");
+        int vacantes = scanner.nextInt();
+        scanner.nextLine();
+        int id_tipo = 0;
+        while(id_tipo < 1 || id_tipo > 4){
+            System.out.println("===============");
+            System.out.println("     Tipo: ");
+            System.out.println("===============");
+            System.out.println("1. Multigrado");
+            System.out.println("2. Bilingue");
+            System.out.println("3. Bilingue acreditado");
+            id_tipo = scanner.nextInt();
+            scanner.nextLine();
+        }
+        Colegio colegio = new Colegio(nombre,id_localizacion,0,vacantes,id_tipo);
+        DB.getColegios().add(colegio);
+        gestionarColegios();
+    }
+    
+    public void quitarColegio(){
+        System.out.println("Nombre:");
+        System.out.println("---------------");
+        String nombre = scanner.nextLine();
+        System.out.println("---------------");
+        boolean noEncontrado = true;
+        Colegio colegioElegido = new Colegio();
+        for(Colegio colegio : DB.getColegios()){
+            if(colegio.getNombre().equals(nombre)){
+                noEncontrado = false;
+                colegioElegido = colegio;
+                for(Trabajador trabajador : DB.getTrabajadores()){
+                    if(trabajador.getColegio().getNombre().equals(colegio.getNombre())){
+                        trabajador.getColegio().setNombre("Sin colegio");
+                    }
+                }
+            }
+        }
+        if(noEncontrado){
+            System.out.println("No se encontro un colegio con ese nombre");
+        }else{
+            DB.getColegios().remove(colegioElegido);
+        }
+        gestionarColegios();
+    }
+    
+    public void verTrabajadoresColegio(){
+        System.out.println("Nombre:");
+        System.out.println("---------------");
+        String nombre = scanner.nextLine();
+        System.out.println("---------------");
+        boolean noEncontrado = true;
+        int contador = 0;
+        for(Colegio colegio : DB.getColegios()){
+            if(colegio.getNombre().equals(nombre)){
+                noEncontrado = false;
+                for(Trabajador trabajador : DB.getTrabajadores()){
+                    if(trabajador.getColegio().getNombre().equals(colegio.getNombre())){
+                        contador++;
+                    }
+                    if(contador == 1){
+                        break;
+                    }
+                }
+                if(contador == 0){
+                    System.out.println("No hay trabajadores registrados en este colegio");
+                }else{
+                    System.out.println("-------------------------------------------------------------------------------------------------------------");
+                    System.out.printf("| %-10s | %-10s | %-15s | %-17s | %-15s | %-10s | %-10s |\n", "Nombre", "Apellido", "DNI", "Horas trabajadas", "Colegio", "Rol","Tipo");
+                    System.out.println("-------------------------------------------------------------------------------------------------------------");
 
+                    for (Trabajador trabajador : DB.getTrabajadores()) {
+                        if(trabajador.getColegio().getNombre().equals(colegio.getNombre())){
+                            System.out.printf("| %-10s | %-10s | %-15s | %-17s | %-15s | %-10s | %-10s |\n",
+                            trabajador.getNombre(),
+                            trabajador.getApellido(),
+                            trabajador.getDNI(),
+                            trabajador.getHorasTrabajadas(),
+                            trabajador.getColegio().getNombre(),
+                            trabajador.getRol()[trabajador.getId_rol() - 1],
+                            trabajador.getTipo()[trabajador.getId_tipo() - 1]);
+                        }
+                    }
+
+                    System.out.println("-------------------------------------------------------------------------------------------------------------");
+
+                }
+            }
+        }
+        if(noEncontrado){
+            System.out.println("No se encontro un colegio con ese nombre");
+        }
+        
+        System.out.println("¿Volver al anterior menu?(Y)");
+        String volver = scanner.nextLine();
+        gestionarColegios();
+    }
+    
     public void gestionarTrabajadores(){
         int opcion = 0;
         do{
@@ -660,13 +797,12 @@ public class Administrador extends Usuario{
             op = scanner.nextInt();
             scanner.nextLine();
             System.out.println("-------------------------------");
-            int id;
+            String id;
             boolean noEncontrado;
             switch(op){
                 case 1:
                     System.out.println("Digite el id del reclamo:");
-                    id = scanner.nextInt();
-                    scanner.nextLine();
+                    id = scanner.nextLine();
                     noEncontrado = true;
                     for (Trabajador trabajador: DB.getTrabajadores()){
                         for(Reclamo reclamo : trabajador.getReclamos()){
@@ -692,8 +828,7 @@ public class Administrador extends Usuario{
                     noEncontrado = true;
                     System.out.println("------------");
                     System.out.println("ID: ");
-                    id = scanner.nextInt();
-                    scanner.nextLine();
+                    id = scanner.nextLine();
                     System.out.println("------------");
                     for (Trabajador trabajador: DB.getTrabajadores()){
                         for(Reclamo reclamo : trabajador.getReclamos()){
@@ -724,6 +859,33 @@ public class Administrador extends Usuario{
                     menuPrincipal();break;
                 default:
                     System.out.println("Numero invalido");break;
+            }
+        }
+    }
+    
+    public void gestionarColegios(){
+        verColegios();
+        int opcion = 0;
+        while(opcion < 1 || opcion > 4){
+            System.out.println("----------------------------------");
+            System.out.println("1. Agregar colegio");
+            System.out.println("2. Quitar colegio");
+            System.out.println("3. Ver trabajadores de un colegio");
+            System.out.println("4. Regresar al menu principal");
+            System.out.println("----------------------------------");
+            opcion = scanner.nextInt();
+            scanner.nextLine();
+            switch(opcion){
+                case 1:
+                    agregarColegio();break;
+                case 2:
+                    quitarColegio();break;
+                case 3:
+                    verTrabajadoresColegio();break;
+                case 4:
+                    menuPrincipal();break;
+                default:
+                    System.out.println("Numero invalido");
             }
         }
     }

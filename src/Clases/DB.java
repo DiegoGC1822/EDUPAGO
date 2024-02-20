@@ -14,8 +14,8 @@ public class DB {
     
     public static void inicializacion() {
         // Agregar colegios de ejemplo
-        colegios.add(new Colegio("Mercedes", 1, 34, 2, 3));
-        colegios.add(new Colegio("Santa Lucia", 3, 20, 5, 5));
+        colegios.add(new Colegio("Mercedes", 1, 20, 2, 2));
+        colegios.add(new Colegio("Santa Lucia", 3, 15, 5, 3));
 
         // Agregar trabajadores de ejemplo
         Trabajador trabajador1 = new Trabajador("Juan", "Perez", colegios.get(0), "12345678", 40, 1, 1, 1 , 5, 9,  new ArrayList<>(), new ArrayList<>());

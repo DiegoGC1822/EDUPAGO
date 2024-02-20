@@ -4,12 +4,15 @@ package Clases;
 public class Colegio {
     private String nombre;
     private int id_localizacion;
-    private static final String[] localizacionNombre = {"Rural 1","Rural 2","Rural 3","Frontera","VRAEM"};
-    private static final double[] localizacion = {500,100,70,100,300};
+    private static final String[] localizacionNombre = {"Rural 1","Rural 2","Rural 3","Frontera","VRAEM","Area metropolitana"};
+    private static final double[] localizacion = {500,100,70,100,300,0};
     private int numTrabajadores;
     private int vacantes;
     private int id_tipo;
-    private static final String[] tipo = {"Unidocente","Multigrado","Bilingue","Bilingue acreditado"};
+    private static final String[] tipo = {"Multigrado","Bilingue","Bilingue acreditado"};
+
+    public Colegio() {
+    }
 
     public Colegio(String nombre, int id_localizacion, int numTrabajadores, int vacantes, int id_tipo) {
         this.nombre = nombre;
