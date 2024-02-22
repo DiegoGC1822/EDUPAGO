@@ -14,21 +14,25 @@ public class DB {
     
     public static void inicializacion() {
         // Agregar colegios de ejemplo
-        colegios.add(new Colegio("Mercedes", 1, 20, 2, 2));
-        colegios.add(new Colegio("Santa Lucia", 3, 15, 5, 3));
+        colegios.add(new Colegio("Mercedes", 1, 1, 14, 2));
+        colegios.add(new Colegio("Santa Lucia", 3, 1, 20, 3));
 
         // Agregar trabajadores de ejemplo
-        Trabajador trabajador1 = new Trabajador("Juan", "Perez", colegios.get(0), "12345678", 40, 1, 1, 1 , 5, 9,  new ArrayList<>(), new ArrayList<>());
+        Trabajador trabajador1 = new Trabajador("Juan", "Perez", colegios.get(0), "12345678", 40, 1, 1, 1 , 4, 9,  new ArrayList<>(), new ArrayList<>());
         Trabajador trabajador2 = new Trabajador("Maria", "Gonzalez", colegios.get(1), "87654321", 35, 2, 2, 2, 3, 6, new ArrayList<>(), new ArrayList<>());
 
         // Agregar pagos de ejemplo para los trabajadores
         Pago pago1 = new Pago();
         pago1.setFecha("17-02-2024");
-        trabajador1.createPago(pago1, trabajador1, colegios.get(0), 1);
+        pago1.setSueldoBruto(pago1.calcularSueldo(trabajador1, pago1));
+        pago1.setSueldo(pago1.getSueldoBruto());
+        trabajador1.getPagos().add(pago1);
 
         Pago pago2 = new Pago();
         pago2.setFecha("15-01-2024");
-        trabajador2.createPago(pago2, trabajador2, colegios.get(1), 2);
+        pago2.setSueldoBruto(pago2.calcularSueldo(trabajador2, pago2));
+        pago2.setSueldo(pago2.getSueldoBruto());
+        trabajador2.getPagos().add(pago2);
         
         Reclamo reclamo1 = new Reclamo(3,"No me pagaron el mes pasado",1,"16-02-2024");
         reclamo1.setId("1a1");
@@ -46,7 +50,6 @@ public class DB {
     public static void login(){
         Administrador admin = new Administrador();
         Director director = new Director();
-        Empleado empleado = new Empleado();
         boolean noEncontrado = true;
         System.out.println("==============");
         System.out.println("    EDUPAGO");
@@ -63,8 +66,8 @@ public class DB {
                 if(director.autentificar(usuario, contraseña, trabajador)){
                     director.menuPrincipal(trabajador);
                     noEncontrado = false;
-                }else if(empleado.autentificar(usuario, contraseña, trabajador)){
-                    empleado.menuPrincipal(trabajador);
+                }else if(trabajador.autentificar(usuario, contraseña, trabajador)){
+                    trabajador.menuPrincipal(trabajador);
                     noEncontrado = false;
                 }
             }

@@ -1,6 +1,6 @@
 package Clases;
 
-public class Director extends Empleado{
+public class Director extends Trabajador{
     
     public boolean autentificar(String usu, String contra, Trabajador trabajador){
         return usu.equals(trabajador.getNombre()) && contra.equals(trabajador.getDNI()) 

@@ -1,5 +1,5 @@
 package Clases;
-
+import java.util.Scanner;
 
 public class Reclamo {
     private String id;
@@ -18,6 +18,62 @@ public class Reclamo {
         this.detalle = detalle;
         this.id_tipo = id_tipo;
         this.fecha = fecha;
+    }
+    
+    public static void actualizarEstado(){
+        Scanner scanner = new Scanner(System.in);
+        boolean noEncontrado = true;
+        System.out.println("------------");
+        System.out.println("ID: ");
+        String id = scanner.nextLine();
+        System.out.println("------------");
+        for (Trabajador trabajador: DB.getTrabajadores()){
+            for(Reclamo reclamo : trabajador.getReclamos()){
+                if(reclamo.getId().equals(id)){
+                    noEncontrado = false;
+                    System.out.println("===============");
+                    System.out.println("Actual estado");
+                    System.out.println("===============");
+                    System.out.println(reclamo.getEstado()[reclamo.getId_estado() - 1]);
+                    System.out.println("===============");
+                    System.out.println("Nuevo estado");
+                    System.out.println("===============");
+                    System.out.println("1. Resuelto");
+                    System.out.println("2. No procede");
+                    System.out.println("-------------------");
+                    int estado = scanner.nextInt();
+                    scanner.nextLine();
+                    reclamo.setId_estado(estado);
+                }
+            }
+        }
+        if(noEncontrado){
+            System.out.println("No se ha encontrado un reclamo con ese ID");
+        }
+    }
+    
+    public static void mostrarDetalle(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Digite el id del reclamo:");
+        String id = scanner.nextLine();
+        boolean noEncontrado = true;
+        for (Trabajador trabajador: DB.getTrabajadores()){
+            for(Reclamo reclamo : trabajador.getReclamos()){
+                if(reclamo.getId().equals(id)){
+                    noEncontrado = false;
+                    System.out.println("=====================");
+                    System.out.println("Detalle del reclamo");
+                    System.out.println("=====================");
+                    System.out.println(reclamo.getDetalle());
+                    System.out.println("---------------------------------");
+                    System.out.println("Regresar? (Y)");
+                    String volver = scanner.nextLine();  
+                }
+            }
+        }
+        if(noEncontrado){
+            System.out.println("No se ha encontrado un reclamo con ese ID");
+        }
     }
 
     public String getId() {
