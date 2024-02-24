@@ -18,7 +18,7 @@ public class DB {
         colegios.add(new Colegio("Santa Lucia", 3, 1, 20, 3));
 
         // Agregar trabajadores de ejemplo
-        Trabajador trabajador1 = new Trabajador("Juan", "Perez", colegios.get(0), "12345678", 40, 1, 1, 1 , 4, 9,  new ArrayList<>(), new ArrayList<>());
+        Trabajador trabajador1 = new Trabajador("Juan", "Perez", colegios.get(0), "12345678", 40, 1, 1, 2 , 1, 5,  new ArrayList<>(), new ArrayList<>());
         Trabajador trabajador2 = new Trabajador("Maria", "Gonzalez", colegios.get(1), "87654321", 35, 2, 2, 2, 3, 6, new ArrayList<>(), new ArrayList<>());
 
         // Agregar pagos de ejemplo para los trabajadores
@@ -41,6 +41,7 @@ public class DB {
         Reclamo reclamo2 = new Reclamo(3,"Trabajo 40 horas",2,"5-01-2024");
         reclamo2.setId("3B1");
         trabajador2.getReclamos().add(reclamo2);
+        
 
         // Agregar los trabajadores a la lista de trabajadores
         trabajadores.add(trabajador1);
@@ -49,7 +50,6 @@ public class DB {
     
     public static void login(){
         Administrador admin = new Administrador();
-        Director director = new Director();
         boolean noEncontrado = true;
         System.out.println("==============");
         System.out.println("    EDUPAGO");
@@ -63,10 +63,7 @@ public class DB {
             noEncontrado = false;
         }else{
             for(Trabajador trabajador : trabajadores){
-                if(director.autentificar(usuario, contraseña, trabajador)){
-                    director.menuPrincipal(trabajador);
-                    noEncontrado = false;
-                }else if(trabajador.autentificar(usuario, contraseña, trabajador)){
+                if(trabajador.autentificar(usuario, contraseña, trabajador)){
                     trabajador.menuPrincipal(trabajador);
                     noEncontrado = false;
                 }
@@ -74,6 +71,7 @@ public class DB {
         }
         if(noEncontrado){
             System.out.println("El usuario o contraseña son incorrectos");
+            login();
         }
     }
     

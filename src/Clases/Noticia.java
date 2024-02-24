@@ -1,19 +1,16 @@
 package Clases;
 
+public class Noticia {
+   private String id;
+   private String titulo;
+   private String tipo;
+   private String detalle;
+   private String fecha;
 
-public class Capacitacion {
-    private String id;
-    private String titulo;
-    private String duracion;
-    private String modalidad;
-    private String detalle;
-    private String fecha;
-
-    public Capacitacion(String id, String titulo, String duracion, String modalidad, String detalle, String fecha) {
+    public Noticia(String id, String titulo, String tipo, String detalle, String fecha) {
         this.id = id;
         this.titulo = titulo;
-        this.duracion = duracion;
-        this.modalidad = modalidad;
+        this.tipo = tipo;
         this.detalle = detalle;
         this.fecha = fecha;
     }
@@ -34,20 +31,12 @@ public class Capacitacion {
         this.titulo = titulo;
     }
 
-    public String getDuracion() {
-        return duracion;
+    public String getTipo() {
+        return tipo;
     }
 
-    public void setDuracion(String duracion) {
-        this.duracion = duracion;
-    }
-
-    public String getModalidad() {
-        return modalidad;
-    }
-
-    public void setModalidad(String modalidad) {
-        this.modalidad = modalidad;
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     public String getDetalle() {
@@ -65,6 +54,6 @@ public class Capacitacion {
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
-    
-    
+   
+   
 }

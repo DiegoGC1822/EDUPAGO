@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-public class Trabajador extends Usuario{
+public class Trabajador{
     private String nombre;
     private String apellido;
     private Colegio colegio;
@@ -23,8 +23,9 @@ public class Trabajador extends Usuario{
     private static final String[] cargoExtra = {"Director", "Subdirector", "Jerarquico", "Ninguno"};
     private int id_escala;
     private static final double[] escala={3100.50, 3410.55, 3720.60, 4030.65, 4650.75, 5425.88, 5890.95, 6511.05,0};
-    private List<Pago> pagos;
-    private List<Reclamo> reclamos;
+    private List<Pago> pagos = new ArrayList<>();
+    private List<Reclamo> reclamos = new ArrayList<>();
+    private List<Informe> informes = new ArrayList<>();
 
     
     Scanner scanner = new Scanner(System.in);
@@ -47,7 +48,6 @@ public class Trabajador extends Usuario{
         this.reclamos = reclamos;
     }
     
-    @Override
     public boolean autentificar(String usu, String contra, Trabajador trabajador){
         return usu.equals(trabajador.getNombre()) && contra.equals(trabajador.getDNI());
     }
@@ -385,33 +385,71 @@ public class Trabajador extends Usuario{
     
     public void menuPrincipal(Trabajador trabajador){
         int opcion = 0;
-        while(opcion != 5){
-            System.out.println("=====================");
-            System.out.println("BIENVENIDO A EDUPAGO");
-            System.out.println("=====================");
-            System.out.println("1. Ver planilla");
-            System.out.println("2. Ver pagos");
-            System.out.println("3. Hacer reclamo");
-            System.out.println("4. Ver reclamos");
-            System.out.println("5. Salir");
-            System.out.println("---------------------");
-            opcion = scanner.nextInt();
-            scanner.nextLine();
-            System.out.println("---------------------");
-            switch(opcion){
-                case 1:
-                    verPlanilla(trabajador);break;
-                case 2:
-                    verPagos(trabajador);break;
-                case 3:
-                    hacerReclamo(trabajador);break;
-                case 4:
-                    verReclamos(trabajador);break;
-                case 5:
-                    System.out.println("Nos vemos en otra ocasion");
-                    DB.login();break;
-                default:
-                    System.out.println("Numero invalido");break;
+        if(trabajador.getId_cargoExtra() != 1){
+           while(opcion != 5){
+                System.out.println("=====================");
+                System.out.println("BIENVENIDO A EDUPAGO");
+                System.out.println("=====================");
+                System.out.println("1. Ver planilla");
+                System.out.println("2. Ver pagos");
+                System.out.println("3. Hacer reclamo");
+                System.out.println("4. Ver reclamos");
+                System.out.println("5. Salir");
+                System.out.println("---------------------");
+                opcion = scanner.nextInt();
+                scanner.nextLine();
+                System.out.println("---------------------"); 
+                switch(opcion){
+                    case 1:
+                        verPlanilla(trabajador);break;
+                    case 2:
+                        verPagos(trabajador);break;
+                    case 3:
+                        hacerReclamo(trabajador);break;
+                    case 4:
+                        verReclamos(trabajador);break;
+                    case 5:
+                        System.out.println("Nos vemos en otra ocasion");
+                        DB.login();break;
+                    default:
+                        System.out.println("Numero invalido");
+                }
+           } 
+        }else{
+            while(opcion != 7){
+                System.out.println("=====================");
+                System.out.println("BIENVENIDO A EDUPAGO");
+                System.out.println("=====================");
+                System.out.println("1. Ver planilla");
+                System.out.println("2. Ver pagos");
+                System.out.println("3. Hacer reclamo");
+                System.out.println("4. Ver reclamos");
+                System.out.println("5. Hacer informe");
+                System.out.println("6. Ver informes");
+                System.out.println("7. Salir");
+                System.out.println("---------------------");
+                opcion = scanner.nextInt();
+                scanner.nextLine();
+                System.out.println("---------------------");
+                switch(opcion){
+                    case 1:
+                        verPlanilla(trabajador);break;
+                    case 2:
+                        verPagos(trabajador);break;
+                    case 3:
+                        hacerReclamo(trabajador);break;
+                    case 4:
+                        verReclamos(trabajador);break;
+                    case 5:
+                        hacerInforme(trabajador);break;
+                    case 6:
+                        verInformes(trabajador);break;
+                    case 7:
+                        System.out.println("Nos vemos en otra ocasion");
+                        DB.login();break;
+                    default:
+                        System.out.println("Numero invalido");
+                }
             }
         }
     }
@@ -467,7 +505,7 @@ public class Trabajador extends Usuario{
         String volver = scanner.nextLine();
     }
     
-    public static String generarID(int longitud) {
+    public String generarID(int longitud) {
         String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         SecureRandom random = new SecureRandom();
         StringBuilder sb = new StringBuilder(longitud);
@@ -580,6 +618,96 @@ public class Trabajador extends Usuario{
                 }
             }
         }
+    }
+    
+    public void hacerInforme(Trabajador trabajador){
+        System.out.println("Titulo: ");
+        Scanner scanner = new Scanner(System.in);
+        String titulo = scanner.nextLine();
+        System.out.println("Detalle: ");
+        String detalle = scanner.nextLine();
+        int op = 0;
+        while(op < 1 || op > 3){
+            System.out.println("==============");
+            System.out.println("     Tipo:");
+            System.out.println("==============");
+            System.out.println("1. Solicitud de recursos");
+            System.out.println("2. Solicitud de capacitacion");
+            System.out.println("3. Otro");
+            op = scanner.nextInt();
+            scanner.nextLine();
+        }
+        Date fechaActual = new Date();
+        SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+        String fechaFormateada = formato.format(fechaActual);
+        String id = generarID(3);
+        Informe informe = new Informe(id,titulo,op,detalle,fechaFormateada);
+        trabajador.getInformes().add(informe);
+        System.out.println("====================================");
+        System.out.println("Se mando el informe exitosamente");
+        System.out.println("====================================");
+        System.out.println("---------------------------");
+        System.out.println("Volver al menu principal?");
+        String volver = scanner.nextLine();
+    }
+    
+    public void verInformes(Trabajador trabajador){
+       System.out.println("Historial de reclamos para " + trabajador.getNombre() + " " + trabajador.getApellido() + ":");
+        if(trabajador.getInformes().isEmpty()){
+            System.out.println("No tiene informes registrados");
+            System.out.println("---------------------------------");
+            System.out.println("Volver al menu principal? (Y)");
+            String volver = scanner.nextLine();
+            menuPrincipal(trabajador);
+        }else{
+            System.out.println("-----------------------------------------------------------------------------------------------------");
+            System.out.printf("| %-10s | %-20s | %-15s | %-25s | %-15s |\n", "ID", "Titulo","Fecha", "Tipo", "Estado");
+            System.out.println("-----------------------------------------------------------------------------------------------------"); 
+            for(Informe informe : trabajador.getInformes()){
+                System.out.printf("| %-10s | %-20s | %-15s | %-25s | %-15s |\n",
+                informe.getId(),
+                informe.getTitulo(),
+                informe.getFecha(),
+                informe.getTipo()[informe.getId_tipo() - 1],
+                informe.getEstado()[informe.getId_estado() - 1]);
+                System.out.println("-----------------------------------------------------------------------------------------------------"); 
+            }
+            int op = 0;
+            String volver;
+            while(op < 1 || op > 3){
+                System.out.println("-------------------------------");
+                System.out.println("1. Ver detalle de un informe");
+                System.out.println("2. Eliminar un informe");
+                System.out.println("3. Regresar al menu principal");
+                System.out.println("-------------------------------");
+                op = scanner.nextInt();
+                scanner.nextLine();
+                switch(op){
+                    case 1:
+                        Informe.verDetalle();
+                        System.out.println("---------------------------");
+                        System.out.println("Volver al menu? (Y)");
+                        volver = scanner.nextLine();
+                        verInformes(trabajador);break;
+                    case 2:
+                        Informe.delete(trabajador);
+                        System.out.println("====================================");
+                        System.out.println("Se elimino el informe exitosamente");
+                        System.out.println("====================================");
+                        System.out.println("---------------------------");
+                        System.out.println("Volver al menu? (Y)");
+                        volver = scanner.nextLine();
+                        verInformes(trabajador);
+                        break;
+                    case 3:
+                        menuPrincipal(trabajador);break;
+                }
+            }
+        }   
+    }
+
+    public List<Informe> getInformes() {
+        return informes;
     }
     
     public int getId_rol() {

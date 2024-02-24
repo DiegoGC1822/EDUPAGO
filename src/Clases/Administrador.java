@@ -1,20 +1,22 @@
 package Clases;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Administrador extends Usuario{
+public class Administrador{
     
-    @Override
+    private String usuario = "diego";
+    private String contraseña = "123";
+    
     public boolean autentificar(String usu, String contra, Trabajador trabajador){
-        return usu.equals("diego") && contra.equals("123");
+        return usu.equals(usuario) && contra.equals(contraseña);
     }
     
     public Administrador() {
     }
 
-    public Administrador(String nombre_usuario, String contraseña) {
-        super(nombre_usuario, contraseña);
+    public Administrador(String usuario, String contraseña) {
+        this.usuario = usuario;
+        this.contraseña = contraseña;
     }
     
     Scanner scanner = new Scanner(System.in);
@@ -337,7 +339,55 @@ public class Administrador extends Usuario{
         }
     }
     
+    public void verTablaInformes(){
+        System.out.println("-----------------------------------------------------------------------------------------------------");
+        System.out.printf("| %-10s | %-20s | %-15s | %-25s | %-15s |\n", "ID", "Titulo","Fecha", "Tipo", "Estado");
+        System.out.println("-----------------------------------------------------------------------------------------------------");
+        for(Trabajador trabajador : DB.getTrabajadores()){
+            for(Informe informe : trabajador.getInformes()){
+                System.out.printf("| %-10s | %-20s | %-15s | %-25s | %-15s |\n",
+                informe.getId(),
+                informe.getTitulo(),
+                informe.getFecha(),
+                informe.getTipo()[informe.getId_tipo() - 1],
+                informe.getEstado()[informe.getId_estado() - 1]);
+                System.out.println("-----------------------------------------------------------------------------------------------------");
+            }
+        }
+    }
+    
     public void gestionarInformes(){
-        
+        int op = 0;
+        while(op < 1 || op > 3){
+            verTablaInformes();
+            System.out.println("--------------------------");
+            System.out.println("1. Ver detalle de informe");
+            System.out.println("2. Actualizar estado");
+            System.out.println("3. Regresar al menu principal");
+            System.out.println("-------------------------");
+            op = scanner.nextInt();
+            scanner.nextLine();
+            String volver;
+            switch(op){
+                case 1: 
+                    Informe.verDetalle();
+                    System.out.println("---------------------");
+                    System.out.println("Volver al menu? (Y)");
+                    volver = scanner.nextLine();
+                    gestionarInformes();break;
+                case 2:
+                    Informe.actualizarEstado();
+                    System.out.println("=========================================");
+                    System.out.println("El estado se ha actualizado correctamante");
+                    System.out.println("==========================================");
+                    System.out.println("Volver al menu? (Y)");
+                    volver = scanner.nextLine();
+                    gestionarInformes();break;
+                case 3:
+                    menuPrincipal();
+                default:
+                    System.out.println("Numero invalido");break;
+            }
+        } 
     }
 }

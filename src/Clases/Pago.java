@@ -142,10 +142,18 @@ public class Pago {
         System.out.println("Fecha del pago:");
         System.out.println("--------------------");
         String fecha = scanner.nextLine();
+        Pago pagoEncontrado = new Pago();
+        boolean noEncontrado = true;
         for(Pago pago : trabajador.getPagos()){
             if(pago.getFecha().equals(fecha)){
-                trabajador.getPagos().remove(pago);
+                pagoEncontrado = pago;
+                noEncontrado = false;
             }
+        }
+        if(noEncontrado){
+            System.out.println("No se encontro el pago");
+        }else{
+            trabajador.getPagos().remove(pagoEncontrado);
         }
     }
     

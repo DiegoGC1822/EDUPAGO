@@ -41,6 +41,8 @@ public class Reclamo {
                     System.out.println("1. Resuelto");
                     System.out.println("2. No procede");
                     System.out.println("-------------------");
+                    System.out.println("3. Cancelar");
+                    System.out.println("-------------------");
                     int estado = scanner.nextInt();
                     scanner.nextLine();
                     reclamo.setId_estado(estado);
@@ -61,10 +63,14 @@ public class Reclamo {
             for(Reclamo reclamo : trabajador.getReclamos()){
                 if(reclamo.getId().equals(id)){
                     noEncontrado = false;
+                    System.out.println("Reclamo de: " + trabajador.getNombre());
                     System.out.println("=====================");
                     System.out.println("Detalle del reclamo");
                     System.out.println("=====================");
                     System.out.println(reclamo.getDetalle());
+                    System.out.println("----------------------------------");
+                    System.out.println("Reclamo proviniente del colegio: ");
+                    System.out.println(trabajador.getColegio().getNombre());
                     System.out.println("---------------------------------");
                     System.out.println("Regresar? (Y)");
                     String volver = scanner.nextLine();  
