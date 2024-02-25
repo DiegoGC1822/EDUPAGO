@@ -394,7 +394,8 @@ public class Trabajador{
                 System.out.println("2. Ver pagos");
                 System.out.println("3. Hacer reclamo");
                 System.out.println("4. Ver reclamos");
-                System.out.println("5. Salir");
+                System.out.println("5. Ver capacitaciones");
+                System.out.println("6. Salir");
                 System.out.println("---------------------");
                 opcion = scanner.nextInt();
                 scanner.nextLine();
@@ -409,6 +410,8 @@ public class Trabajador{
                     case 4:
                         verReclamos(trabajador);break;
                     case 5:
+                        verCapacitaciones(trabajador);break;
+                    case 6:
                         System.out.println("Nos vemos en otra ocasion");
                         DB.login();break;
                     default:
@@ -426,7 +429,8 @@ public class Trabajador{
                 System.out.println("4. Ver reclamos");
                 System.out.println("5. Hacer informe");
                 System.out.println("6. Ver informes");
-                System.out.println("7. Salir");
+                System.out.println("7. Ver capacitaciones");
+                System.out.println("8. Salir");
                 System.out.println("---------------------");
                 opcion = scanner.nextInt();
                 scanner.nextLine();
@@ -445,6 +449,8 @@ public class Trabajador{
                     case 6:
                         verInformes(trabajador);break;
                     case 7:
+                        verCapacitaciones(trabajador);break;
+                    case 8:
                         System.out.println("Nos vemos en otra ocasion");
                         DB.login();break;
                     default:
@@ -652,7 +658,7 @@ public class Trabajador{
     }
     
     public void verInformes(Trabajador trabajador){
-       System.out.println("Historial de reclamos para " + trabajador.getNombre() + " " + trabajador.getApellido() + ":");
+       System.out.println("Historial de informes de " + trabajador.getNombre() + " " + trabajador.getApellido() + ":");
         if(trabajador.getInformes().isEmpty()){
             System.out.println("No tiene informes registrados");
             System.out.println("---------------------------------");
@@ -704,6 +710,57 @@ public class Trabajador{
                 }
             }
         }   
+    }
+    
+    public void verCapacitaciones(Trabajador trabajador){
+        int op = 0;
+        String volver;
+        while(op != 4){
+            Capacitacion.read();
+            System.out.println("-----------------------------");
+            System.out.println("1. Ver detalles");
+            System.out.println("2. Inscribirse");
+            System.out.println("3. Ver inscripciones");
+            System.out.println("4. Regresar al menu principal");
+            System.out.println("-----------------------------");
+            op = scanner.nextInt();
+            scanner.nextLine();
+            switch(op){
+                case 1:
+                    Capacitacion.verDetalles();
+                    System.out.println("---------------------");
+                    System.out.println("Volver al menu? (Y)");
+                    volver = scanner.nextLine();break;
+                case 2:
+                    Inscripcion.inscribirse(trabajador);
+                    System.out.println("---------------------");
+                    System.out.println("Volver al menu? (Y)");
+                    volver = scanner.nextLine();break;
+                case 3:
+                    verInscripciones(trabajador);
+                    System.out.println("-------------------------------------------------------------------");
+                    System.out.println("Volver al menu? (Y)");
+                    volver = scanner.nextLine();break;
+                case 4:
+                    menuPrincipal(trabajador);break;
+                default:
+                    System.out.println("Numero invalido");
+            }
+        }
+    }
+    
+    public void verInscripciones(Trabajador trabajador){
+        int flag = 0;
+        for(Inscripcion inscripcion : DB.getInscripciones()){
+            if(inscripcion.getTrabajador().getDNI().equals(trabajador.getDNI())){
+                flag++;
+                System.out.println("-------------------------------------------------------------------");
+                System.out.println(flag + ". " + inscripcion.getCapacitacion().getTitulo());
+            }
+        }
+        if(flag == 0){
+            System.out.println("No se ha inscrito a ninguna capacitacion");
+        }
     }
 
     public List<Informe> getInformes() {

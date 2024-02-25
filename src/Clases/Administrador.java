@@ -29,9 +29,11 @@ public class Administrador{
             System.out.println("=====================");
             System.out.println("1. Gestionar trabajadores y sus pagos");
             System.out.println("2. Gestionar reclamos");
-            System.out.println("3. Gestionar Colegios");
-            System.out.println("4. Gestionar Informes");
-            System.out.println("5. Salir");
+            System.out.println("3. Gestionar colegios");
+            System.out.println("4. Gestionar informes");
+            System.out.println("5. Gestionar capacitaciones");
+            System.out.println("6. Gestionar noticias");
+            System.out.println("7. Salir");
             System.out.println("---------------------");
             opcion = scanner.nextInt();
             scanner.nextLine();
@@ -46,6 +48,10 @@ public class Administrador{
                 case 4:
                     gestionarInformes();break;
                 case 5:
+                    gestionarCapacitaciones();break;
+                case 6:
+                    gestionarNoticias();break;
+                case 7:
                     System.out.println("Nos vemos en otra ocasion");
                     DB.login();break;
                 default:
@@ -284,9 +290,9 @@ public class Administrador{
     }
     
     public void gestionarReclamos(){
-        verTablaReclamos();
         int op = 0;
-        while(op < 1 || op > 3){
+        while(op != 3){
+            verTablaReclamos();
             System.out.println("-------------------------------");
             System.out.println("1. Ver detalle de un reclamo");
             System.out.println("2. Actualizar estado");
@@ -298,11 +304,9 @@ public class Administrador{
             switch(op){
                 case 1:
                     Reclamo.mostrarDetalle();
-                    gestionarReclamos();
                     break;
                 case 2:
                     Reclamo.actualizarEstado();
-                    gestionarReclamos();
                     break;
                 case 3:
                     menuPrincipal();break;
@@ -313,9 +317,9 @@ public class Administrador{
     }
     
     public void gestionarColegios(){
-        verColegios();
         int opcion = 0;
-        while(opcion < 1 || opcion > 4){
+        while(opcion != 4){
+            verColegios();
             System.out.println("----------------------------------");
             System.out.println("1. Agregar colegio");
             System.out.println("2. Quitar colegio");
@@ -358,7 +362,7 @@ public class Administrador{
     
     public void gestionarInformes(){
         int op = 0;
-        while(op < 1 || op > 3){
+        while(op != 3){
             verTablaInformes();
             System.out.println("--------------------------");
             System.out.println("1. Ver detalle de informe");
@@ -374,7 +378,7 @@ public class Administrador{
                     System.out.println("---------------------");
                     System.out.println("Volver al menu? (Y)");
                     volver = scanner.nextLine();
-                    gestionarInformes();break;
+                    break;
                 case 2:
                     Informe.actualizarEstado();
                     System.out.println("=========================================");
@@ -382,12 +386,62 @@ public class Administrador{
                     System.out.println("==========================================");
                     System.out.println("Volver al menu? (Y)");
                     volver = scanner.nextLine();
-                    gestionarInformes();break;
+                    break;
                 case 3:
                     menuPrincipal();
                 default:
                     System.out.println("Numero invalido");break;
             }
         } 
+    }
+    
+    public void gestionarCapacitaciones(){
+        int op = 0;
+        String volver;
+        while(op != 5){
+            Capacitacion.read();
+            System.out.println("--------------------------------");
+            System.out.println("1. Crear capacitacion");
+            System.out.println("2. Ver detalle");
+            System.out.println("3. Eliminar capacitacion");
+            System.out.println("4. Ver trabajadores incritos en la capacitacion");
+            System.out.println("5. Regresar al menu principal");
+            System.out.println("--------------------------------");
+            op = scanner.nextInt();
+            scanner.nextLine();
+            switch(op){
+                case 1:
+                    Capacitacion.create();
+                    System.out.println("Volver al menu? (Y)");
+                    volver = scanner.nextLine();
+                    break;
+                case 2:
+                    Capacitacion.verDetalles();
+                    System.out.println("---------------------");
+                    System.out.println("Volver al menu? (Y)");
+                    volver = scanner.nextLine();
+                    break;
+                case 3:
+                    Capacitacion.delete();
+                    System.out.println("---------------------");
+                    System.out.println("Volver al menu? (Y)");
+                    volver = scanner.nextLine();
+                    break;
+                case 4:
+                    Inscripcion.mostrarTrabajadoresInscritos();
+                    System.out.println("----------------------------------------------");
+                    System.out.println("Volver al menu? (Y)");
+                    volver = scanner.nextLine();
+                    break;
+                case 5:
+                    menuPrincipal();
+                default:
+                    System.out.println("Numero invalido");
+            }
+        }
+    }
+    
+    public void gestionarNoticias(){
+        
     }
 }

@@ -8,6 +8,6 @@ package Clases;
  *
  * @author fenix
  */
-public class Catalogo {
+public class Visualizacion {
     
 }

@@ -7,6 +7,10 @@ import java.util.Scanner;
 public class DB {
     private static List<Trabajador> trabajadores = new ArrayList<>();
     private static List<Colegio> colegios = new ArrayList<>();
+    private static List<Noticia> noticias = new ArrayList<>();
+    private static List<Capacitacion> capacitaciones = new ArrayList<>();
+    private static List<Inscripcion> inscripciones = new ArrayList<>();
+    private static List<Visualizacion> visualizaciones = new ArrayList<>();
     static Scanner scanner = new Scanner(System.in);
 
     public DB() {
@@ -42,8 +46,30 @@ public class DB {
         reclamo2.setId("3B1");
         trabajador2.getReclamos().add(reclamo2);
         
+        String detalle1 = "Esta capacitacion se centrarq en tecnicas de evaluacion formativa \n"
+                + "para monitorear el progreso de los estudiantes de manera continua. Se abordaran \n"
+                + "diferentes metodos de retroalimentacion y estrategias para integrar la evaluacion \n"
+                + "en el proceso de enseñanza-aprendizaje." ;
+        
+        Capacitacion capacitacion1 = new Capacitacion("Aa2","Estrategias de Evaluacion Formativa en el Aula",
+                "Lunes-Miercoles-Viernes",2,2,detalle1,25,"2-03-2024");
+        
+        String detalle2 = "Esta capacitacion proporcionara a los profesores habilidades practicas \n"
+                + "para integrar herramientas digitales en sus practicas pedagogicas. Se exploraran \n"
+                + "recursos en linea, aplicaciones educativas y plataformas de aprendizaje virtual.";
+        
+        Capacitacion capacitacion2 = new Capacitacion("Bb1","Uso Efectivo de Herramientas Digitales en el Aula",
+                "Martes-Jueves",3,1,detalle2,30,"30-02-2024");
+        
+        Inscripcion inscripcion1 = new Inscripcion(capacitacion1,trabajador1);
+        Inscripcion inscripcion2 = new Inscripcion(capacitacion2,trabajador2);
+        
+        capacitaciones.add(capacitacion1);
+        capacitaciones.add(capacitacion2);
+        
+        inscripciones.add(inscripcion1);
+        inscripciones.add(inscripcion2);
 
-        // Agregar los trabajadores a la lista de trabajadores
         trabajadores.add(trabajador1);
         trabajadores.add(trabajador2);
     }
@@ -81,5 +107,21 @@ public class DB {
 
     public static List<Colegio> getColegios() {
         return colegios;
+    }
+
+    public static List<Noticia> getNoticias() {
+        return noticias;
+    }
+
+    public static List<Inscripcion> getInscripciones() {
+        return inscripciones;
+    }
+
+    public static List<Visualizacion> getVisualizaciones() {
+        return visualizaciones;
+    }
+
+    public static List<Capacitacion> getCapacitaciones() {
+        return capacitaciones;
     }
 }
