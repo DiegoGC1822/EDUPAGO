@@ -1,13 +1,49 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Clases;
 
-/**
- *
- * @author fenix
- */
 public class Visualizacion {
+    private Noticia noticia;
+    private Trabajador trabajador;;
+    private String estado = "No visto";
+
+    public Visualizacion() {
+    }
+
+    public Visualizacion(Noticia noticia) {
+        this.noticia = noticia;
+    }
+
+    public Visualizacion(Trabajador trabajador) {
+        this.trabajador = trabajador;
+    }
+
+    public Visualizacion(Noticia noticia, Trabajador trabajador) {
+        this.noticia = noticia;
+        this.trabajador = trabajador;
+    }
+
+    public Noticia getNoticia() {
+        return noticia;
+    }
+
+    public void setNoticia(Noticia noticia) {
+        this.noticia = noticia;
+    }
+
+    public Trabajador getTrabajador() {
+        return trabajador;
+    }
+
+    public void setTrabajador(Trabajador trabajador) {
+        this.trabajador = trabajador;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
     
 }

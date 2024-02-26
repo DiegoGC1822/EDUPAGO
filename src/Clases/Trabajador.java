@@ -54,6 +54,7 @@ public class Trabajador{
     
     public static void create() {
         Scanner scanner = new Scanner(System.in);
+        Trabajador t = new Trabajador();
         System.out.println("Nombre: ");
         String nombre = scanner.nextLine();
         System.out.println("Apellido: ");
@@ -111,7 +112,7 @@ public class Trabajador{
             scanner.nextLine();
         }
         if(id_rol == 2 || id_tipo == 1){
-            Trabajador t = new Trabajador(nombre, apellido, colegioElegido,DNI, ht, 
+            t = new Trabajador(nombre, apellido, colegioElegido,DNI, ht, 
                     id_gradoAca, id_rol, id_tipo, 4, 9,new ArrayList<>(), new ArrayList<>());
             DB.getTrabajadores().add(t);
         }else{
@@ -135,9 +136,12 @@ public class Trabajador{
                 id_escala = scanner.nextInt();
                 scanner.nextLine();
             }
-            Trabajador t = new Trabajador(nombre, apellido, colegioElegido,DNI, ht, 
+            t = new Trabajador(nombre, apellido, colegioElegido,DNI, ht, 
                     id_gradoAca, id_rol, id_tipo,id_cargoExtra, id_escala,new ArrayList<>(), new ArrayList<>());
             DB.getTrabajadores().add(t);
+        }
+        for(Noticia noticia : DB.getNoticias()){
+            DB.getVisualizaciones().add(new Visualizacion(noticia,t));
         }
     }
     
@@ -395,7 +399,8 @@ public class Trabajador{
                 System.out.println("3. Hacer reclamo");
                 System.out.println("4. Ver reclamos");
                 System.out.println("5. Ver capacitaciones");
-                System.out.println("6. Salir");
+                System.out.println("6. Ver noticias");
+                System.out.println("7. Salir");
                 System.out.println("---------------------");
                 opcion = scanner.nextInt();
                 scanner.nextLine();
@@ -412,6 +417,8 @@ public class Trabajador{
                     case 5:
                         verCapacitaciones(trabajador);break;
                     case 6:
+                        verNoticias(trabajador);break;
+                    case 7:
                         System.out.println("Nos vemos en otra ocasion");
                         DB.login();break;
                     default:
@@ -430,7 +437,8 @@ public class Trabajador{
                 System.out.println("5. Hacer informe");
                 System.out.println("6. Ver informes");
                 System.out.println("7. Ver capacitaciones");
-                System.out.println("8. Salir");
+                System.out.println("8. Ver noticias");
+                System.out.println("9. Salir");
                 System.out.println("---------------------");
                 opcion = scanner.nextInt();
                 scanner.nextLine();
@@ -451,6 +459,8 @@ public class Trabajador{
                     case 7:
                         verCapacitaciones(trabajador);break;
                     case 8:
+                        verNoticias(trabajador);break;
+                    case 9:
                         System.out.println("Nos vemos en otra ocasion");
                         DB.login();break;
                     default:
@@ -760,6 +770,62 @@ public class Trabajador{
         }
         if(flag == 0){
             System.out.println("No se ha inscrito a ninguna capacitacion");
+        }
+    }
+    
+    public void verNoticias(Trabajador trabajador){
+        int op = 0;
+        while(op != 2){
+            System.out.println("-------------------------------------------------------------------------------------------------------");
+            System.out.printf("| %-99s |\n", "                                SECCION DE NOTICIAS");
+            System.out.println("-------------------------------------------------------------------------------------------------------");
+            System.out.printf("| %-10s | %-50s | %-20s | %-10s |\n","ID","Titular","Fecha de publicacion","Estado");
+            System.out.println("-------------------------------------------------------------------------------------------------------");
+            for(Visualizacion visualizacion : DB.getVisualizaciones()){
+                if(visualizacion.getTrabajador().getDNI().equals(trabajador.getDNI())){
+                    String titular = visualizacion.getNoticia().getTipo()[visualizacion.getNoticia().getId_tipo() - 1] + " " + visualizacion.getNoticia().getTitulo();
+                    System.out.printf("| %-10s | %-50s | %-20s | %-10s |\n",
+                        visualizacion.getNoticia().getId(),
+                        titular,
+                        visualizacion.getNoticia().getFecha(),
+                        visualizacion.getEstado());
+                    System.out.println("-------------------------------------------------------------------------------------------------------");
+                } 
+            }
+            System.out.println("1. Ver detalle");
+            System.out.println("2. Volver al menu principal");
+            System.out.println("---------------------------");
+            op = scanner.nextInt();
+            scanner.nextLine();
+            String volver;
+            switch(op){
+            case 1:
+                System.out.println("Digite el id de la noticia");
+                String id = scanner.nextLine();
+                boolean noEncontrado = true;
+                for(Visualizacion visualizacion : DB.getVisualizaciones()){
+                    if(visualizacion.getNoticia().getId().equals(id) && 
+                            visualizacion.getTrabajador().getDNI().equals(trabajador.getDNI())){
+                        noEncontrado = false;
+                        visualizacion.setEstado("Visto");
+                        System.out.println("=======================");
+                        System.out.println("Detalle de la noticia");
+                        System.out.println("=======================");
+                        System.out.println(visualizacion.getNoticia().getDetalle());
+                    }
+                }
+                if(noEncontrado){
+                    System.out.println("No se encontro una noticia con ese id");
+                }
+                System.out.println("--------------------------");
+                System.out.println("Volver al menu? (Y)");
+                volver = scanner.nextLine();
+                break;
+            case 2:
+                menuPrincipal(trabajador);
+            default:
+                System.out.println("Numero invalido");
+            }
         }
     }
 

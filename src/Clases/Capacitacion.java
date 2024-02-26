@@ -203,6 +203,5 @@ public class Capacitacion {
     public void setHorasAlDia(int horasAlDia) {
         this.horasAlDia = horasAlDia;
     }
-    
-    
+
 }

@@ -64,6 +64,33 @@ public class DB {
         Inscripcion inscripcion1 = new Inscripcion(capacitacion1,trabajador1);
         Inscripcion inscripcion2 = new Inscripcion(capacitacion2,trabajador2);
         
+        String detalle3 = "Se convoca a todos los docentes nombrados de escala 6 en adelante a una reunión de planificacion curricular para\n"
+                + "el proximo semestre. En esta reunion se discutiran los objetivos educativos, las estrategias de\n"
+                + "enseñanza y los recursos necesarios para garantizar una experiencia de aprendizaje de calidad\n"
+                + "para los estudiantes.";
+        
+        Noticia noticia1 = new Noticia("3ab","Reunion de Planificacion Curricular",2,detalle3,"20-02-2024");
+        
+        String detalle4 = "Se anuncia el lanzamiento del concurso \"Innovación Pedagogica del Mes\" dirigido a todo el personal docente\n"
+                + "de los colegios. Los participantes pueden enviar propuestas de nuevas metodologias, actividades o proyectos que promuevan\n "
+                + "la innovacion en el aula. El ganador sera seleccionado por un comite evaluador y recibira un premio especial.\n "
+                + "La fecha limite para enviar propuestas es el prooximo viernes.";
+        
+        Noticia noticia2 = new Noticia("1v2","Innovacion Pedagogica del Mes",3,detalle4,"21-02-2024");
+        
+        Visualizacion visualizacion1 = new Visualizacion(noticia1,trabajador1);
+        Visualizacion visualizacion2 = new Visualizacion(noticia1,trabajador2);
+        Visualizacion visualizacion3 = new Visualizacion(noticia2,trabajador1);
+        Visualizacion visualizacion4 = new Visualizacion(noticia2,trabajador2);
+        
+        visualizaciones.add(visualizacion1);
+        visualizaciones.add(visualizacion2);
+        visualizaciones.add(visualizacion3);
+        visualizaciones.add(visualizacion4);
+        
+        noticias.add(noticia1);
+        noticias.add(noticia2);
+        
         capacitaciones.add(capacitacion1);
         capacitaciones.add(capacitacion2);
         

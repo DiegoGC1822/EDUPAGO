@@ -441,7 +441,56 @@ public class Administrador{
         }
     }
     
+    public void verNoticias(){
+        System.out.println("------------------------------------------------------------------------------------------");
+        System.out.printf("| %10s | %-50s | %-20s |\n","ID" ,"Titular","Fecha de publicacion");
+        System.out.println("------------------------------------------------------------------------------------------");
+        for(Noticia noticia : DB.getNoticias()){
+            String titular = noticia.getTipo()[noticia.getId_tipo() - 1] + " " + noticia.getTitulo();
+            System.out.printf("| %10s | %-50s | %-20s |\n",
+                noticia.getId(),
+                titular,
+                noticia.getFecha());
+            System.out.println("------------------------------------------------------------------------------------------");
+        }
+    }
+    
     public void gestionarNoticias(){
-        
+        int op = 0;
+        String volver;
+        while(op != 5){
+            verNoticias();
+            System.out.println("--------------------------------");
+            System.out.println("1. Crear una noticia");
+            System.out.println("2. Actualizar una noticia");
+            System.out.println("3. Ver detalle de una noticia");
+            System.out.println("4. Eliminar noticia");
+            System.out.println("5. Volver al menu principal");
+            System.out.println("--------------------------------");
+            op = scanner.nextInt();
+            scanner.nextLine();
+            switch(op){
+                case 1:
+                    Noticia.create();
+                    System.out.println("Regresar? (Y)");
+                    volver = scanner.nextLine();break;
+                case 2:
+                    Noticia.update();
+                    System.out.println("Regresar? (Y)");
+                    volver = scanner.nextLine();break;
+                case 3:
+                    Noticia.verDetalle();
+                    System.out.println("Regresar? (Y)");
+                    volver = scanner.nextLine();break;
+                case 4:
+                    Noticia.delete();
+                    System.out.println("Regresar? (Y)");
+                    volver = scanner.nextLine();break;
+                case 5:
+                    menuPrincipal();break;
+                default:
+                    System.out.println("Numero invalido");
+            }
+        }
     }
 }
